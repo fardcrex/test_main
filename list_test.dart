@@ -42,17 +42,23 @@ class WidgetState {
     entidades = List.generate(3, Entidad.fromIndex).toList(growable: false);
   }
 
-  deleteEntidad(Entidad entidad) {}
+updateEntidad(Entidad entidad) {
+    entidades = entidades.map((element) => element.id == entidad.id ? entidad : element).toList();
+  }
 
-  addEntidad(Entidad entidad) {}
+  deleteEntidad(Entidad entidad) {
+    entidades = entidades.where((element) => element.id != entidad.id).toList();
+  }
 
-  updateEntidad(Entidad entidad) {}
-
-  bool get hasEntityWithValueOverTen {
-    return false;
+  addEntidad(Entidad entidad) {
+    entidades = [...entidades, entidad];
+  }
+  
+bool get hasEntityWithValueOverTen {
+    return  entidades.any((element) => element.value > 10);
   }
 
   bool get areAllEntitiesOdd {
-    return true;
+    return  entidades.every((element) => element.value.isOdd);
   }
 }
