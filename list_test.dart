@@ -25,7 +25,7 @@ void main() {
     final state = WidgetState();
 
     print(state.entidades);
-    // [Entidad(id: "0", value: 0, foo: "0")]
+    // [Entidad(id: "abc", value: 1, foo: "foo")]
 
     print(state.addEntidad(Entidad('xyz', 5, 'bar')));
     // [Entidad(id: "abc", value: 1, foo: "foo"), Entidad(id: "xyz", value: 5, foo: "bar")]
@@ -66,13 +66,20 @@ class WidgetState {
         growable: false);
   }
 
-  List<Entidad> updateEntidad({required String id, required int value}) => [];
+ 
+  List<Entidad> updateEntidad({required String id, required int value}) =>  entidades.map((entidad) => entidad.id == id ? Entidad(id, value, entidad.foo) : e).toList();
 
-  List<Entidad> deleteEntidad({required String id}) => [];
+  List<Entidad> deleteEntidad({required String id}) =>  entidades.where((entidad) => entidad.id != id).toList();
 
-  List<Entidad> addEntidad(Entidad entidad) => [];
+  List<Entidad> addEntidad(Entidad entidad) =>  [...entidades, entidad];
 
-  int get sumValuesEven => 0;
+  int get sumValuesEven =>  entidades.where((e) => e.value.isEven).map((e) => e.value).fold(0, (prev, value) => prev + value);
 
-  Iterable<int> getValuesOddAndMultiplesOfThreeAndFive() sync* {}
+  Iterable<int> getValuesOddAndMultiplesOfThreeAndFive() sync* {
+    for (final entidad in entidades) {
+      if (entidad.value.isOdd && entidad.value % 3 == 0  && entidad.value % 5 == 0) {
+        yield entidad.value;
+      }
+    }
+  }
 }
