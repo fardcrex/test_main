@@ -1,64 +1,78 @@
 void main() {
-  final state = WidgetState();
+  {
+    print('CHECK UPDATE');
+    final state = WidgetState();
 
-  state.updateEntidad(Entidad('1', 55));
+    print(state.entidades);
+    // [Entidad(id: "abc", value: 1, foo: "foo")]
 
-  print(state.entidades);
-  // [Entidad(id: 0, value: 0), Entidad(id: 1, value: 55), Entidad(id: 2, value: 2)]
+    print(state.updateEntidad(id: 'abc', value: 88));
+    // [Entidad(id: "abc", value: 88, foo: "foo")]
+  }
+  {
+    print('\nCHECK DELETE');
+    final state = WidgetState();
 
-  state.deleteEntidad(Entidad('0', 0));
+    print(state.entidades);
+    // [Entidad(id: "abc", value: 1, foo: "foo")]
 
-  print(state.entidades);
-  // [Entidad(id: 1, value: 55), Entidad(id: 2, value: 2)]
+    print(state.deleteEntidad(id: 'abc'));
+    // []
+  }
 
-  state.addEntidad(Entidad('3', 3));
+  {
+    print('\nCHECK ADD');
+    final state = WidgetState();
 
-  print(state.entidades);
-  // [Entidad(id: 1, value: 55),Entidad(id: 2, value: 2), Entidad(id: 3, value: 3)]
+    print(state.entidades);
+    // [Entidad(id: "0", value: 0, foo: "0")]
 
-  print(state.hasEntityWithValueOverTen);
+    print(state.addEntidad(Entidad('xyz', 5, 'bar')));
+    // [Entidad(id: "abc", value: 1, foo: "foo"), Entidad(id: "xyz", value: 5, foo: "bar")]
+  }
 
-  print(state.areAllEntitiesOdd);
+  print('\nCHECK GETTERS');
+
+  final state = WidgetState.generate(length: 145);
+
+  print(state.sumValuesEven); // 5256
+
+  print(state.getValuesOddAndMultiplesOfThreeAndFive());
+
+  //(15, 45, 75, 105, 135)
 }
 
 class Entidad {
-  final int value;
   final String id;
+  final int value;
+  final String foo;
 
-  const Entidad(this.id, this.value);
-
-  factory Entidad.fromIndex(int index) {
-    return Entidad(index.toString(), index);
-  }
+  const Entidad(this.id, this.value, this.foo);
 
   @override
-  String toString() => 'Entidad(id: "$id", value: $value)';
+  String toString() => 'Entidad(id: "$id", value: $value, foo: "$foo")';
 }
 
 class WidgetState {
-  late List<Entidad> entidades;
+  late final List<Entidad> entidades;
 
   WidgetState() {
-    entidades = List.generate(3, Entidad.fromIndex).toList(growable: false);
+    entidades = [Entidad('abc', 1, 'foo')].toList(growable: false);
   }
 
-updateEntidad(Entidad entidad) {
-    entidades = entidades.map((element) => element.id == entidad.id ? entidad : element).toList();
+  WidgetState.generate({required int length}) {
+    entidades = List.generate(
+        length, (index) => Entidad('$index', index, 'foo $index'),
+        growable: false);
   }
 
-  deleteEntidad(Entidad entidad) {
-    entidades = entidades.where((element) => element.id != entidad.id).toList();
-  }
+  List<Entidad> updateEntidad({required String id, required int value}) => [];
 
-  addEntidad(Entidad entidad) {
-    entidades = [...entidades, entidad];
-  }
-  
-bool get hasEntityWithValueOverTen {
-    return  entidades.any((element) => element.value > 10);
-  }
+  List<Entidad> deleteEntidad({required String id}) => [];
 
-  bool get areAllEntitiesOdd {
-    return  entidades.every((element) => element.value.isOdd);
-  }
+  List<Entidad> addEntidad(Entidad entidad) => [];
+
+  int get sumValuesEven => 0;
+
+  Iterable<int> getValuesOddAndMultiplesOfThreeAndFive() sync* {}
 }
