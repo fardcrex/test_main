@@ -1,8 +1,11 @@
 void main() {
+  // var repository = ServidorRepository();
+  // repository = FirebaseRepository();
+  
   final usecase = AdquirirProductoUseCase();
-  
- final result = usecase.execute(1);
-  
+
+  final result = usecase.execute(1015);
+
   print(result);
 }
 
@@ -12,14 +15,15 @@ class AdquirirProductoUseCase {
   String execute(int id) => repository.buyProduct(id);
 }
 
+
 class ServidorRepository {
   String buyProduct(int id) {
-    return 'compra exitosa en Servidor';
+    return 'compra exitosa en Servidor de $id';
   }
 }
 
 class FirebaseRepository {
-  String buyProduct(int id) {
-    return 'compra exitosa en Firebase';
+  String buyElement(String id) {
+    return 'compra exitosa en Firebase $id';
   }
 }
