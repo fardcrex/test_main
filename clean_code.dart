@@ -24,5 +24,5 @@ void sendWelcomeText(MediaType media, String name) {
 enum MediaType {
   facebook,
   email,
-  whatssap,
+ // whatssap,
 }
